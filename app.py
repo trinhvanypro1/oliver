@@ -8,6 +8,7 @@ app=Flask(__name__)
 app.secret_key="secretkey"
 app.config['MONGO_URI']="mongodb://localhost:27017/MyDB"
 mongo=PyMongo(app)
+#Thêm data dạng JSON
 @app.route('/add',methods=['POST'])
 def add_user():
     _json=request.json
@@ -20,13 +21,14 @@ def add_user():
         return resp
     else:
         return not_found()
+#Fetch data từ id;
 @app.route('/customers/<id>')
 def customers(id):
     customers=mongo.db.customers.find_one({'_id': ObjectId(id)})
     resp=dumps(customers)
     return resp
 
-
+#Fetch toàn bộ dữ liệu từ database:
 @app.route('/MyDB')
 def MyDB():
     MyDB=mongo.db.customers.find()
